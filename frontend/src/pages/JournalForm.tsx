@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const JournalForm: React.FC = () => {
   const [fontStyle, setFontStyle] = useState('Arial');
@@ -11,6 +12,8 @@ const JournalForm: React.FC = () => {
   });
 
   const editorRef = useRef<HTMLDivElement>(null);
+
+  const navigate = useNavigate();
 
   const toggleFormat = (command: 'bold' | 'italic' | 'underline') => {
     document.execCommand(command, false);
@@ -53,7 +56,7 @@ const JournalForm: React.FC = () => {
   };
 
   const handleBack = () => {
-    window.history.back(); // Or your routing logic
+    navigate('/')
   };
 
   useEffect(() => {

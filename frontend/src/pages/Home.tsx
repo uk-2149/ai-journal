@@ -52,7 +52,7 @@ const Home = () => {
         {/* + button */}
         <button
           className="fixed bottom-6 right-6 sm:hidden bg-sky-700 text-white p-4 rounded-full hover:bg-blue-700 transition-all duration-150 shadow-lg hover:scale-105"
-          onClick={() => navigate('/journal')}
+          onClick={() => navigate('/journalform')}
           title="Write a New Journal"
         >
           <svg

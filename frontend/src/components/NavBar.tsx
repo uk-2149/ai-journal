@@ -1,4 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
 const Navbar = () => {
+
+    const navigate = useNavigate();
+
     return (
       <nav className="bg-gray-800/90 backdrop-blur-sm w-full fixed top-0 z-10 shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
@@ -11,7 +16,7 @@ const Navbar = () => {
 
             <button
               className="hidden sm:block bg-sky-700 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all duration-150 shadow-md"
-              // navigate
+              onClick={() => navigate('/journalform')}
             >
               Write a New Journal
             </button>

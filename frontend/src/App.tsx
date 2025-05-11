@@ -1,16 +1,21 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import JournalForm from './pages/JournalForm';
 // import JournalForm from './pages/JournalForm';
 
 function App() {
+
+  const isLogIn = localStorage.getItem('email') != null;
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={isLogIn ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/login" element={!isLogIn ? <Login /> : <Navigate to="/" />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/journalform" element={isLogIn ? <JournalForm /> : <Navigate to="/login" />} />
         {/* <Route path="/journal" element={<JournalForm />} /> */}
       </Routes>
     </BrowserRouter>

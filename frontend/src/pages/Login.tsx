@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/config"; 
 import { useNavigate } from "react-router-dom";
@@ -24,8 +24,8 @@ const Login = () => {
       }
 
       alert("Login successful!");
-      localStorage.setItem('email', email)
-      navigate('/')
+      localStorage.setItem('email', email);
+      navigate('/');
     } catch (error: any) {
       alert("Login failed: " + error.message);
     }
