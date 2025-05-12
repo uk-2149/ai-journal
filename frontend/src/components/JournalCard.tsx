@@ -39,12 +39,12 @@ const JournalCard = ({ journal }: JournalCardProps) => {
           {journal.mood}
         </span>
       </div>
-      <div
+      {/* <div
         className="text-gray-900"
         dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(journal.content),
         }}
-      />
+      /> */}
       <p className="text-gray-700 mt-2">{getPreview(journal.content)}</p>
     </div>
   );

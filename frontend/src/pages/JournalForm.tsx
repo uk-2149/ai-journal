@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth, db } from '../firebase/config';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import DOMPurify from 'dompurify';
 
 const JournalForm: React.FC = () => {
   const [fontStyle, setFontStyle] = useState('Arial');
@@ -10,7 +13,7 @@ const JournalForm: React.FC = () => {
     italic: false,
     underline: false,
   });
-
+  const [error, setError] = useState<string | null>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
@@ -46,11 +49,38 @@ const JournalForm: React.FC = () => {
     setCharCount(content.length);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!auth.currentUser) {
+      setError('Please sign in to submit a journal.');
+      return;
+    }
+    console.log('Current user UID:', auth.currentUser?.uid);
     const content = editorRef.current?.innerHTML || '';
-    console.log('Journal submitted:', content);
-    if (editorRef.current) editorRef.current.innerHTML = '';
+    if (!content.trim() || content === '<p>Start writing your journal...</p>') {
+      setError('Journal content cannot be empty.');
+      return;
+    }
+
+    try {
+      const sanitizedContent = DOMPurify.sanitize(content);
+      await addDoc(collection(db, 'journals'), {
+        userId: auth.currentUser.uid,
+        content: sanitizedContent,
+        createdAt: Timestamp.now(),
+        mood: 'Pending', // Placeholder; update with xAI Grok API analysis
+      });
+      if (editorRef.current) {
+        editorRef.current.innerHTML = '';
+      }
+      setIsEmpty(true);
+      setCharCount(0);
+      setError(null);
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to submit journal:', error);
+      setError('Failed to submit journal. Please try again.');
+    }
     setIsEmpty(true);
     setCharCount(0);
   };
