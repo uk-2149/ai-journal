@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebase/config"; 
 import { useNavigate } from "react-router-dom";
 
@@ -20,11 +20,13 @@ const Login = () => {
 
       if (!user.emailVerified) {
         alert("Please verify your email before logging in.");
+        await signOut(auth);
         return;
       }
 
       alert("Login successful!");
-      localStorage.setItem('email', email);
+      const token = await user.getIdToken();
+      localStorage.setItem('token', token);
       navigate('/');
     } catch (error: any) {
       alert("Login failed: " + error.message);

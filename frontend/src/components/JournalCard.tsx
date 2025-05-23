@@ -1,5 +1,6 @@
 import type { Journal } from '../types/types';
 import DOMPurify from 'dompurify';
+import { useNavigate } from 'react-router-dom';
 
 interface JournalCardProps {
   journal: Journal;
@@ -12,6 +13,7 @@ const JournalCard = ({ journal }: JournalCardProps) => {
     const text = div.textContent || div.innerText || '';
     return text.slice(0, 100) + (text.length > 100 ? '...' : '');
   };
+  const navigate = useNavigate();
 
   const moodColors: { [key: string]: string } = {
     Positive: 'bg-green-500',
@@ -19,8 +21,13 @@ const JournalCard = ({ journal }: JournalCardProps) => {
     Neutral: 'bg-gray-500',
   };
 
+  const handleClick = () => {
+    navigate(`/journal/${journal.id}`);
+  };
+
+
   return (
-    <div className="bg-white/95 rounded-lg shadow-lg p-6 border border-gray-700">
+    <div className="bg-white/95 rounded-lg shadow-lg p-6 border border-gray-700" onClick={handleClick}>
       <div className="flex items-center justify-between mb-4">
         <span className="text-gray-900 font-semibold">
           {new Date(journal.createdAt).toLocaleDateString('en-US', {
