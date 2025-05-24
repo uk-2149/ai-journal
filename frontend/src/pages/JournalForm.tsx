@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase/config';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import DOMPurify from 'dompurify';
+import analyzeMood from '../gemini/config';
 
 const JournalForm: React.FC = () => {
   const [fontStyle, setFontStyle] = useState('Arial');
@@ -64,11 +65,12 @@ const JournalForm: React.FC = () => {
 
     try {
       const sanitizedContent = DOMPurify.sanitize(content);
+      const mood = await analyzeMood(sanitizedContent);
       await addDoc(collection(db, 'journals'), {
         userId: auth.currentUser.uid,
         content: sanitizedContent,
         createdAt: Timestamp.now(),
-        mood: 'Pending', // Placeholder; update with xAI Grok API analysis
+        mood: mood 
       });
       if (editorRef.current) {
         editorRef.current.innerHTML = '';

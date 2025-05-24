@@ -4,6 +4,7 @@ import { auth, db } from '../firebase/config';
 import { doc, getDoc } from 'firebase/firestore';
 import type { Journal } from '../types/types';
 import Navbar from '../components/NavBar';
+import Spider from '../components/Spider';
 
 const JournalPage = () => {
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ const JournalPage = () => {
     fetchJournal();
   }, [id]);
 
+
   const handleBack = () => {
     navigate('/');
   };
@@ -106,13 +108,16 @@ const JournalPage = () => {
                 day: 'numeric',
               })}
             </h2>
-            <p className="text-sky-400 mb-4">Mood: {journal.mood}</p>
+            {/* <p className="text-sky-400 mb-4">Mood: {journal.mood}</p> */}
             <div
               className="prose prose-invert max-w-none text-gray-200"
               dangerouslySetInnerHTML={{ __html: journal.content }}
             />
           </div>
         ) : null}
+
+        {journal && <Spider journal={journal} />}
+        
       </div>
     </div>
   );

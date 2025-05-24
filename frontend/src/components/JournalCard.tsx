@@ -15,12 +15,17 @@ const JournalCard = ({ journal }: JournalCardProps) => {
   };
   const navigate = useNavigate();
 
-  const moodColors: { [key: string]: string } = {
-    Positive: 'bg-green-500',
-    Negative: 'bg-red-500',
-    Neutral: 'bg-gray-500',
+  const moodColors: Record<string, string> = {
+    happy: 'bg-green-500',
+    sad: 'bg-blue-500',
+    angry: 'bg-red-500',
+    stressed: 'bg-yellow-500'
   };
 
+  const dominantMood = Object.keys(journal.mood).reduce((a, b) =>
+    journal.mood[a as keyof typeof journal.mood] > journal.mood[b as keyof typeof journal.mood] ? a : b
+  );  
+  
   const handleClick = () => {
     navigate(`/journal/${journal.id}`);
   };
@@ -39,12 +44,13 @@ const JournalCard = ({ journal }: JournalCardProps) => {
           })}
         </span>
         <span
-          className={`px-3 py-1 rounded-full text-white text-sm ${
-            moodColors[journal.mood] || 'bg-gray-500'
-          }`}
-        >
-          {journal.mood}
-        </span>
+  className={`px-3 py-1 rounded-full text-white text-sm ${
+    moodColors[dominantMood] || 'bg-gray-500'
+  }`}
+>
+  {dominantMood.charAt(0).toUpperCase() + dominantMood.slice(1)}
+</span>
+
       </div>
       {/* <div
         className="text-gray-900"
